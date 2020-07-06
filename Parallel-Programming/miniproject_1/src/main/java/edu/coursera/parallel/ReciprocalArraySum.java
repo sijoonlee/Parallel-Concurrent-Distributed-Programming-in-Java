@@ -108,11 +108,10 @@ public final class ReciprocalArraySum {
 
         private double value;
 
-        private int numTasks;
+        private final int numTasks;
 
-        private int SEQUENTIAL_THRESHOLD;
+        private final int SEQUENTIAL_THRESHOLD;
 
-        private ForkJoinPool pool;
 
         /**
          * Constructor.
@@ -145,7 +144,6 @@ public final class ReciprocalArraySum {
                 int chunkStartIndex = getChunkStartInclusive(chunk, numTasks, endIndexExclusive - startIndexInclusive) + startIndexInclusive;
                 int chunkEndIndex = getChunkEndExclusive(chunk, numTasks, endIndexExclusive - startIndexInclusive) + startIndexInclusive;
                 subTasks.add(new ReciprocalArraySumTask(chunkStartIndex, chunkEndIndex, input, numTasks, SEQUENTIAL_THRESHOLD));
-                // System.out.println("-----" + chunkStartIndex + chunkEndIndex);
             }
 
             return subTasks;
@@ -158,10 +156,17 @@ public final class ReciprocalArraySum {
                 for (int i = startIndexInclusive; i < endIndexExclusive; i++) {
                     value += 1 / input[i];
                 }
+//                System.out.println(startIndexInclusive + " " +endIndexExclusive);
+//                System.out.println("subset computed");
             } else {
                 ArrayList<ReciprocalArraySumTask> subTasks = createSubTasks();
+//                System.out.println(subTasks.size());
                 invokeAll(subTasks);
+//                for(ReciprocalArraySumTask task : subTasks){
+//                    task.fork();
+//                }
                 for(ReciprocalArraySumTask task : subTasks){
+//                    task.join();
                     value += task.getValue();
                 }
             }
@@ -181,9 +186,10 @@ public final class ReciprocalArraySum {
     protected static double parArraySum(final double[] input) {
         assert input.length % 2 == 0;
         //long startTime = System.nanoTime();
-        ForkJoinPool pool = new ForkJoinPool(2);
+        final ForkJoinPool pool = new ForkJoinPool(2);
+        // System.setProperty("java.util.concurrent.ForkJoinPool.common.parallelism", "2");
         //System.out.println("length: " + input.length);
-        ReciprocalArraySumTask task = new ReciprocalArraySumTask(0, input.length, input, 2, input.length/8);
+        ReciprocalArraySumTask task = new ReciprocalArraySumTask(0, input.length, input, 2, 40000);
         pool.invoke(task);
 //        long timeInNanos = System.nanoTime() - startTime;
 //        System.out.println("parArraySum " + timeInNanos/1000000 + " "+ task.getValue() + " expected 104672.524998 | 10459940.214862");
@@ -202,11 +208,11 @@ public final class ReciprocalArraySum {
      */
     protected static double parManyTaskArraySum(final double[] input,
             final int numTasks) {
-        ForkJoinPool pool = new ForkJoinPool(numTasks);
+        final ForkJoinPool pool = new ForkJoinPool(numTasks);
         assert input.length % 2 == 0;
         // long startTime = System.nanoTime();
         // System.out.println("length: " + input.length);
-        ReciprocalArraySumTask task = new ReciprocalArraySumTask(0, input.length, input, numTasks, 5_000_000);
+        ReciprocalArraySumTask task = new ReciprocalArraySumTask(0, input.length, input, numTasks, 40000);
         pool.invoke(task);
         // long timeInNanos = System.nanoTime() - startTime;
         // System.out.println("parMayTaskArraySum " + timeInNanos + " "+ task.getValue());

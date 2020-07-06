@@ -11,6 +11,7 @@ public class ReciprocalArraySumTest extends TestCase {
     private static int getNCores() {
         String ncoresStr = System.getenv("COURSERA_GRADER_NCORES");
         if (ncoresStr == null) {
+            //System.out.println(Runtime.getRuntime().availableProcessors());
             return Runtime.getRuntime().availableProcessors();
         } else {
             return Integer.parseInt(ncoresStr);
