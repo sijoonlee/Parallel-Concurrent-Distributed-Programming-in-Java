@@ -11,7 +11,7 @@ public class ReciprocalArraySumTest extends TestCase {
     private static int getNCores() {
         String ncoresStr = System.getenv("COURSERA_GRADER_NCORES");
         if (ncoresStr == null) {
-            //System.out.println(Runtime.getRuntime().availableProcessors());
+            // System.out.println(Runtime.getRuntime().availableProcessors());
             return Runtime.getRuntime().availableProcessors();
         } else {
             return Integer.parseInt(ncoresStr);
@@ -118,7 +118,7 @@ public class ReciprocalArraySumTest extends TestCase {
         final double minimalExpectedSpeedup = 1.5;
         final double speedup = parTestHelper(2_000_000, false, 2);
         final String errMsg = String.format("It was expected that the two-task parallel implementation would run at " +
-                "least %fx faster, but it only achieved %fx speedup", minimalExpectedSpeedup, speedup);
+                "\nleast %fx faster, but it only achieved %fx speedup", minimalExpectedSpeedup, speedup);
         assertTrue(errMsg, speedup >= minimalExpectedSpeedup);
     }
 
@@ -130,7 +130,7 @@ public class ReciprocalArraySumTest extends TestCase {
         final double speedup = parTestHelper(200_000_000, false, 2);
         final double minimalExpectedSpeedup = 1.5;
         final String errMsg = String.format("It was expected that the two-task parallel implementation would run at " +
-                "least %fx faster, but it only achieved %fx speedup", minimalExpectedSpeedup, speedup);
+                "\nleast %fx faster, but it only achieved %fx speedup", minimalExpectedSpeedup, speedup);
         assertTrue(errMsg, speedup >= minimalExpectedSpeedup);
     }
 
@@ -143,7 +143,7 @@ public class ReciprocalArraySumTest extends TestCase {
         final double minimalExpectedSpeedup = (double)ncores * 0.6;
         final double speedup = parTestHelper(2_000_000, true, ncores);
         final String errMsg = String.format("It was expected that the many-task parallel implementation would run at " +
-                "least %fx faster, but it only achieved %fx speedup", minimalExpectedSpeedup, speedup);
+                "\nleast %fx faster, but it only achieved %fx speedup", minimalExpectedSpeedup, speedup);
         assertTrue(errMsg, speedup >= minimalExpectedSpeedup);
     }
 
@@ -156,7 +156,7 @@ public class ReciprocalArraySumTest extends TestCase {
         final double speedup = parTestHelper(200_000_000, true, ncores);
         final double minimalExpectedSpeedup = (double)ncores * 0.8;
         final String errMsg = String.format("It was expected that the many-task parallel implementation would run at " +
-                "least %fx faster, but it only achieved %fx speedup", minimalExpectedSpeedup, speedup);
+                "\nleast %fx faster, but it only achieved %fx speedup", minimalExpectedSpeedup, speedup);
         assertTrue(errMsg, speedup >= minimalExpectedSpeedup);
     }
 }
