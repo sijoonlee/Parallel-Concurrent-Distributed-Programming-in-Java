@@ -182,7 +182,11 @@ public final class ReciprocalArraySum {
         System.setProperty("java.util.concurrent.ForkJoinPool.common.parallelism", "2");
         //System.out.println("CommonPool Parallelism: " + ForkJoinPool.commonPool().getParallelism());
         ReciprocalArraySumTask task = new ReciprocalArraySumTask(0, input.length, input, 2, 8000);
-        ForkJoinPool.commonPool().invoke(task);
+
+        //ForkJoinPool.commonPool().invoke(task);
+        final ForkJoinPool pool = new ForkJoinPool(2);
+        pool.invoke(task);
+
         return task.getValue();
     }
 
@@ -200,8 +204,13 @@ public final class ReciprocalArraySum {
         assert input.length % 2 == 0;
         System.setProperty("java.util.concurrent.ForkJoinPool.common.parallelism", Integer.toString(numTasks));
         // System.out.println("CommonPool Parallelism: " + ForkJoinPool.commonPool().getParallelism());
+
         ReciprocalArraySumTask task = new ReciprocalArraySumTask(0, input.length, input, numTasks, 7000);
-        ForkJoinPool.commonPool().invoke(task);
+
+        // ForkJoinPool.commonPool().invoke(task);
+        final ForkJoinPool pool = new ForkJoinPool(numTasks);
+        pool.invoke(task);
+
         // long timeInNanos = System.nanoTime() - startTime;
         // System.out.println("parMayTaskArraySum " + timeInNanos + " "+ task.getValue());
 
